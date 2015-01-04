@@ -10,7 +10,6 @@ namespace TernaryCalculator.Framework
         public static readonly BalancedTryte MinValue = -88573;
         public static readonly BalancedTryte MaxValue = 88573;
 
-		private const int Limiter = 3;
 		private static readonly int* _tritMultipliers;
 				
 		public const int TryteSize = 11;
@@ -22,7 +21,7 @@ namespace TernaryCalculator.Framework
 			
 			for (int i = 0; i < TryteSize; i++)
 			{
-				_tritMultipliers[i] = (int)Math.Pow(Limiter, i);
+				_tritMultipliers[i] = (int)Math.Pow(3, i);
 			}
 		}
 
@@ -51,9 +50,15 @@ namespace TernaryCalculator.Framework
                 switch (input[i])
                 {
                     case 't':
-                    case 'T': trits[TryteSize - 1 - i] = BalancedTrit.Anti; break;
-                    case '0': trits[TryteSize - 1 - i] = BalancedTrit.False; break;
-                    case '1': trits[TryteSize - 1 - i] = BalancedTrit.True; break;
+                    case 'T': 
+                        trits[TryteSize - 1 - i] = BalancedTrit.Anti; 
+                        break;
+                    case '0':
+                        trits[TryteSize - 1 - i] = BalancedTrit.False; 
+                        break;
+                    case '1': 
+                        trits[TryteSize - 1 - i] = BalancedTrit.True; 
+                        break;
                     default:
                         throw new FormatException();
                 }
@@ -83,24 +88,24 @@ namespace TernaryCalculator.Framework
 
                 for (int i = 0; i < TryteSize; i++)
                 {
-                    var remainder = value % Limiter;
+                    var remainder = value % 3;
 
                     if (remainder == 2)
                     {
                         trits[i] = BalancedTrit.Anti;
-                        value = (value + 1) / 3;
+                        value++;
                     }
                     else if (remainder == -2)
                     {
                         trits[i] = BalancedTrit.True;
-                        value = (value - 1) / 3;
+                        value--;
                     }
                     else
                     {
                         trits[i] = (BalancedTrit)remainder;
-                        value /= 3;
                     }
 
+                    value /= 3;
                 }
 
                 if (value != 0)
@@ -453,8 +458,6 @@ namespace TernaryCalculator.Framework
 
         #endregion
 
-        #region IEquatable<BalancedTryte> Members
-
         public bool Equals(BalancedTryte other)
         {
             for (int i = 0; i < TryteSize; i++)
@@ -464,8 +467,6 @@ namespace TernaryCalculator.Framework
             }
             return true;
         }
-
-        #endregion
 
         public override bool Equals(object obj)
         {
